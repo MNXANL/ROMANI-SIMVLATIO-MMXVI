@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WarriorAnimationDemoFREE : MonoBehaviour 
+public class WarriorAnimationDemoFRE : MonoBehaviour 
 {
 	public Animator animator;
 

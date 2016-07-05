@@ -10,5 +10,9 @@ function Start () {
 
 function Update () {
 	t += Time.deltaTime;
-	if (t > 1) transform.LookAt(player.transform);
+	//if (t > .5) {
+		transform.LookAt(player.transform);
+		t = 0;
+	//}
+	transform.position (1, 0, 0);
 }
