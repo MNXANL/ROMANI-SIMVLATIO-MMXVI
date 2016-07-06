@@ -3,19 +3,52 @@ using System.Collections;
 
 public class PlayerNinjaMovement : MonoBehaviour 
 {
-	public Animator animator;
+	private Animator animator;
+	private float time = 0.0f;
+	public float maxTime = 0.85f;
 
-	float rotationSpeed = 30;
+	private bool teleporting = false;
+	private bool tpAttack = false;
+	private bool tpCombo = false;
 
 	Vector3 inputVec;
 	Vector3 targetDirection;
+
+	float rotationSpeed = 30;
+	bool collider;
 
 	//Warrior types
 	public enum Warrior{Karate, Ninja, Brute, Sorceress, Knight, Mage, Archer, TwoHanded, Swordsman, Spearman, Hammer, Crossbow};
 
 	public Warrior warrior;
 
+	void Start() {
+		animator = GetComponent<Animator> ();
+	}
+
 	void Update()	{
+		time += Time.deltaTime;
+
+		if (teleporting) {
+			if (Input.GetButtonDown ("Fire1")) {
+				if (time > maxTime) {
+					tpAttack = true;
+				} else {
+					Debug.Log ("DOUBLE");
+					tpCombo = true;
+				}
+				time = 0.0f;
+			}
+			return;
+		}
+
+		if (Input.GetButtonDown ("Fire1"))		{
+			if (time > maxTime) animator.SetTrigger ("Attack1Trigger");
+			else animator.SetTrigger ("ComboAttack");
+
+			time = 0.0f;
+		}
+			
 		//Get input from controls
 		float z = Input.GetAxisRaw("Horizontal");
 		float x = -(Input.GetAxisRaw("Vertical"));
@@ -40,12 +73,13 @@ public class PlayerNinjaMovement : MonoBehaviour
 			animator.SetTrigger("Attack1Trigger");
 		}
 
+
 		if (Input.GetButtonDown("Fire2"))		{
 			animator.SetTrigger("ParryTrigger");
 			GetComponent<Rigidbody>().AddForce(Vector3.back);
 		}
 
-		if (Input.GetButtonDown("Jump")) {
+		if (Input.GetButtonDown("Jump") && collider) {
 			Debug.Log ("JUMP");
 			animator.SetTrigger ("JumpTrigger");
 			GetComponent<Rigidbody>().AddForce(Vector3.up * 2000.0f);
@@ -106,5 +140,13 @@ public class PlayerNinjaMovement : MonoBehaviour
 		RotateTowardMovementDirection();  
 		GetCameraRelativeMovement();  
 	}
-		
+	void OnCollisionEnter(Collision col) {
+		Debug.Log ("CollisionEnter");
+		collider = true;
+	}
+
+	void OnCollisionExit(Collision col) {
+		Debug.Log ("CollisionExit");
+		collider = false;
+	}
 }
