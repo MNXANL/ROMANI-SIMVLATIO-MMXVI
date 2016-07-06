@@ -23,7 +23,7 @@ function Update () {
 		var rotY : float = Input.GetAxis("Mouse Y") * mouseRotVelY;
 		mouseRotX += rotX;
 		mouseRotY -= rotY*isYAxisInverted;
-		if(mouseRotX < 5)	mouseRotX = 5;
+		if(mouseRotX < -15)	mouseRotX = -15;
 		if(mouseRotX > 50)	mouseRotX = 50;
 		
 		transform.eulerAngles = Vector3(mouseRotX, mouseRotY, 0.0f);
