@@ -5,6 +5,7 @@ import UnityEngine.Animation;
 public var MaxTime : float = 0.75f;
 public var anim : Animator;
 private var t : float = 0.0f;
+private var timesHit : float = 0.0f;
 
 function Start () {
 
@@ -30,8 +31,9 @@ function Update () {
 	t += Time.deltaTime;
 }
 
-void OnCollisionEnter(col : Collider) {
-	if (gameObject.tag("Sword")) {
-		.
+function OnCollisionEnter(col : Collision) {
+	if (col.gameObject.tag == "Sword") {
+		++timesHit;
+		Debug.Log("YOU DIED - " +  timesHit);
 	}
 }
