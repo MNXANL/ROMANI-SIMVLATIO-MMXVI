@@ -29,3 +29,9 @@ function Update () {
 	}
 	t += Time.deltaTime;
 }
+
+void OnCollisionEnter(col : Collider) {
+	if (gameObject.tag("Sword")) {
+		.
+	}
+}

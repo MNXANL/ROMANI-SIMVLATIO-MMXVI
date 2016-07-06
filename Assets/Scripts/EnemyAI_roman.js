@@ -26,7 +26,7 @@ function Update () {
 				Debug.Log("DIST = " + dist);
 
 				var direc : Vector3 = Vector3(0.0f, 0.2f, 1.0f);
-				Debug.DrawRay(transform.position + Vector3(0,1,0), direc, Color.green, 30.0f);
+				//Debug.DrawRay(transform.position + Vector3(0,1,0), direc, Color.green, 30.0f);
 				//Gizmos.DrawRay(transform.position + Vector3(0,1,0), transform.forward);
 				if (dist < 1) {
 					anim.SetTrigger("Attack1Trigger");
