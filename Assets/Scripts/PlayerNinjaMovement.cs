@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WarriorAnimationDemoFREE : MonoBehaviour 
+public class PlayerNinjaMovement : MonoBehaviour 
 {
 	public Animator animator;
 
@@ -53,6 +53,7 @@ public class WarriorAnimationDemoFREE : MonoBehaviour
 
 		if (Input.GetButtonDown("Jump")) {
 			Debug.Log ("JUMP");
+			animator.SetTrigger ("JumpTrigger");
 			GetComponent<Rigidbody>().AddForce(Vector3.up * 2000.0f);
 		}
 
@@ -106,17 +107,5 @@ public class WarriorAnimationDemoFREE : MonoBehaviour
 		RotateTowardMovementDirection();  
 		GetCameraRelativeMovement();  
 	}
-
-	void OnGUI () 
-	{
-		if (GUI.Button (new Rect (25, 85, 100, 30), "Attack1")) 
-		{
-			animator.SetTrigger("Attack1Trigger");
-
-			if (warrior == Warrior.Brute || warrior == Warrior.Sorceress)  //if character is Brute or Sorceress
-				StartCoroutine (COStunPause(1.2f));
-			else
-				StartCoroutine (COStunPause(.6f));
-		}
-	}
+		
 }

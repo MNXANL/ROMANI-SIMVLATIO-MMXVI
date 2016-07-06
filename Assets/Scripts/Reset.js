@@ -9,6 +9,6 @@ function Update () {
 		SceneManager.LoadScene("Game1");
 	}
 	else if (Input.GetKeyDown(KeyCode.Escape)) {
-		SceneManager.LoadScene("Menu");
+		SceneManager.LoadScene("MainMenu");
 	}
 }
