@@ -14,8 +14,6 @@ function Start () {
 function Update () {
 	t += Time.deltaTime;
 
-
-
 	//if (t > 0.75) {
 		transform.LookAt(player.transform);
 
@@ -27,9 +25,12 @@ function Update () {
 				dist = hitInfo.distance;
 				Debug.Log("DIST = " + dist);
 
-				var direc : Vector3 = transform.forward;
-				Debug.DrawRay(transform.position, direc, Color.green, 30.0f);
-
+				var direc : Vector3 = Vector3(0.0f, 0.2f, 1.0f);
+				//Debug.DrawRay(transform.position, direc, Color.green, 30.0f);
+				Gizmos.DrawRay(transform.position, transform.forward);
+				if (dist < 1) {
+					anim.SetTrigger("Attack1Trigger");
+				}
 			}
 			else seeingPlayer = false;
 		}

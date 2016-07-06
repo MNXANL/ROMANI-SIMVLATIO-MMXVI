@@ -15,8 +15,7 @@ public class PlayerNinjaMovement : MonoBehaviour
 
 	public Warrior warrior;
 
-	void Update()
-	{
+	void Update()	{
 		//Get input from controls
 		float z = Input.GetAxisRaw("Horizontal");
 		float x = -(Input.GetAxisRaw("Vertical"));
@@ -26,29 +25,24 @@ public class PlayerNinjaMovement : MonoBehaviour
 		animator.SetFloat("Input X", z);
 		animator.SetFloat("Input Z", -(x));
 
-		if (x != 0 || z != 0 )  //if there is some input
-		{
-			//set that character is moving
+		if (x != 0 || z != 0 ) {
+			//if there is some inputset that character is moving
 			animator.SetBool("Moving", true);
 			animator.SetBool("Running", true);
 		}
-		else
-		{
+		else {
 			//character is not moving
 			animator.SetBool("Moving", false);
 			animator.SetBool("Running", false);
 		}
 
-		if (Input.GetButtonDown("Fire1"))
-		{
+		if (Input.GetButtonDown("Fire1"))		{
 			animator.SetTrigger("Attack1Trigger");
-			if (warrior == Warrior.Brute)
-				StartCoroutine (COStunPause(1.2f));
-			else if (warrior == Warrior.Sorceress)
-				StartCoroutine (COStunPause(1.2f));
-			else
-				StartCoroutine (COStunPause(.6f));
+		}
 
+		if (Input.GetButtonDown("Fire2"))		{
+			animator.SetTrigger("ParryTrigger");
+			GetComponent<Rigidbody>().AddForce(Vector3.back);
 		}
 
 		if (Input.GetButtonDown("Jump")) {
@@ -60,14 +54,19 @@ public class PlayerNinjaMovement : MonoBehaviour
 		UpdateMovement();  //update character position and facing
 	}
 
-	public IEnumerator COStunPause(float pauseTime)
-	{
+
+
+
+
+
+
+
+	public IEnumerator COStunPause(float pauseTime)	{
 		yield return new WaitForSeconds(pauseTime);
 	}
 
 	//converts control input vectors into camera facing vectors
-	void GetCameraRelativeMovement()
-	{  
+	void GetCameraRelativeMovement()	{  
 		Transform cameraTransform = Camera.main.transform;
 
 		// Forward vector relative to the camera along the x-z plane   
