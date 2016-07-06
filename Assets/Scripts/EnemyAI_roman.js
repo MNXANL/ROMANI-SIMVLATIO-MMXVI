@@ -16,22 +16,26 @@ function Update () {
 
 
 
-	if (t > .5) {
+	//if (t > 0.75) {
 		transform.LookAt(player.transform);
 
 		var hitInfo : RaycastHit;
+		anim.SetTrigger("Movement");
 		if (Physics.Raycast(transform.position, transform.forward, hitInfo))	{
 			if(hitInfo.collider.gameObject.CompareTag("Player")) {
 				seeingPlayer = true;
 				dist = hitInfo.distance;
 				Debug.Log("DIST = " + dist);
-				anim.SetTrigger("Movement");
+
+				var direc : Vector3 = transform.forward;
+				Debug.DrawRay(transform.position, direc, Color.green, 30.0f);
+
 			}
 			else seeingPlayer = false;
 		}
 
 		t = 0;
-	}
+	//}
 
 }
 
