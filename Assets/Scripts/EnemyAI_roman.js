@@ -48,9 +48,9 @@ function Update () {
 
 function OnCollisionEnter(col : Collision) {
 	Debug.Log("Life == " +  Life);
-	//if (col.gameObject.tag == "HITSword") {
+	if (col.gameObject.tag == "HITSword") {
 		Life -= SwordHit;
 		if (Life <= 0) isAlive = false;
 		Debug.Log("Life == " +  Life);
-	//}
+	}
 }

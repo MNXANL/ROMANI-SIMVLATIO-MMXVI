@@ -74,9 +74,9 @@ public class PlayerNinjaMovement : MonoBehaviour {
 				//if there is some input, set that character is moving
 				animator.SetBool("Moving", true);
 				animator.SetBool("Running", true);
-				if (Input.GetButtonDown("Fire3")) {
-					StartCoroutine(COTeleport());
-				}
+				/*if (Input.GetButtonDown("Fire3")) {
+				*	StartCoroutine(COTeleport());
+				}*/
 			}
 			else            {
 				//character is not moving

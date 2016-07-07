@@ -3,32 +3,35 @@
 import UnityEngine.Animation;
 
 public var MaxTime : float = 0.75f;
+public var LifeBar : float = 30.0f; //Number of Hits the player can withstand
 public var anim : Animator;
 private var t : float = 0.0f;
 private var timesHit : float = 0.0f;
+private var kill : boolean = true;
 
 function Start () {
 
 }
 
 function Update () {
-	if (Input.GetKeyDown(KeyCode.E)) {
-	//	Animator.SetTrigger("atk");
-	}
-	if (Input.GetKeyDown(KeyCode.Space)) {
-	//	Animator.SetTrigger("jmp");
-	}
-
-	if (Input.GetButtonDown("Fire1") && t < MaxTime) {
+	if (timesHit < LifeBar) {
 		if (Input.GetButtonDown("Fire1") && t < MaxTime) {
-			t = 0;
-			anim.SetTrigger("ComboAttack");
+			if (Input.GetButtonDown("Fire1") && t < MaxTime) {
+				t = 0;
+				anim.SetTrigger("ComboAttack");
+			}
+			else {
+				t = 0;
+			}
 		}
-		else {
-			t = 0;
+		t += Time.deltaTime;
+	}
+	else {
+		if (kill) {
+			anim.SetTrigger("DeathTrigger");
+			kill = false;
 		}
 	}
-	t += Time.deltaTime;
 }
 
 function OnCollisionEnter(col : Collision) {
