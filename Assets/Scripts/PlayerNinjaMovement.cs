@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerNinjaMovement : MonoBehaviour 
-{
+
+public class PlayerNinjaMovement : MonoBehaviour {
 	private Animator animator;
 	private float time = 0.0f;
 	public float maxTime = 0.75f;
@@ -30,9 +30,13 @@ public class PlayerNinjaMovement : MonoBehaviour
 	void Update()	{
 		time += Time.deltaTime;
 
+		if (Input.GetButton("Fire1")) animator.SetBool("Clicking", true);
+		else animator.SetBool("Clicking", false);
+		animator.SetBool("Attack1Bool", false);
+
 		if (teleporting) {
 			if (Input.GetButtonDown ("Fire1")) {
-				if (time > maxTime) {
+				if (time < maxTime) {
 					tpAttack = true;
 				} else {
 					Debug.Log ("DOUBLE");
@@ -43,12 +47,15 @@ public class PlayerNinjaMovement : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetButtonDown ("Fire1"))	{
-			if(time > maxTime){
-				animator.SetTrigger ("Attack1Trigger");
+		if (Input.GetButtonDown("Fire1")) {
+			if (time < maxTime) {
+				animator.SetBool("Attack1Bool", true);
+				animator.SetBool("AnotherATK", true);
 			}
-			else{
-				animator.SetTrigger ("ComboAttack");
+			else {
+				animator.SetTrigger("ComboAttack");
+				animator.SetBool("Attack1Bool", false);
+				animator.SetBool("AnotherATK", true);
 			}
 			time = 0.0f;
 		}
@@ -62,39 +69,36 @@ public class PlayerNinjaMovement : MonoBehaviour
 		animator.SetFloat("Input X", z);
 		animator.SetFloat("Input Z", -(x));
 
-		if (x != 0 || z != 0 ) {
-			//if there is some input, set that character is moving
-			animator.SetBool("Moving", true);
-			animator.SetBool("Running", true);
-			if(Input.GetButtonDown("Fire3")){
-				StartCoroutine (COTeleport ());
+		if (collider)        {
+			if (x != 0 || z != 0)  {
+				//if there is some input, set that character is moving
+				animator.SetBool("Moving", true);
+				animator.SetBool("Running", true);
+				if (Input.GetButtonDown("Fire3")) {
+					StartCoroutine(COTeleport());
+				}
+			}
+			else            {
+				//character is not moving
+				animator.SetBool("Moving", false);
+				animator.SetBool("Running", false);
+			}
+
+			if (Input.GetButton("Fire2"))            {
+				animator.SetBool("Defensa", true);
+			}
+			if (Input.GetButtonUp("Fire2"))            {
+				animator.SetBool("Defensa", false);
+			}
+			if (Input.GetButtonDown("Jump"))            {
+				Debug.Log("JUMP");
+				GetComponent<Rigidbody>().AddForce(Vector3.up * JumpPower);
 			}
 		}
-		else {
-			//character is not moving
-			animator.SetBool("Moving", false);
-			animator.SetBool("Running", false);
-		}
-
-		if (Input.GetButtonDown("Fire1"))		{
-			animator.SetTrigger("Attack1Trigger");
-		}
-
-		if (Input.GetButtonDown	("Fire2"))		{
-			animator.SetBool("Defensa", true);
-		}
-		if (Input.GetButtonUp("Fire2"))		{
-			animator.SetBool("Defensa", false);
-		}
-
-		if (Input.GetButtonDown("Jump") && collider) {
-			Debug.Log ("JUMP");
-			animator.SetTrigger ("JumpTrigger");
-			GetComponent<Rigidbody>().AddForce(Vector3.up * 2000.0f);
-		}
-
-		if (collider) {
-			animator.SetTrigger ("DeathTrigger");
+		else        {
+			if (Input.GetButtonDown("Fire1"))            {
+				animator.SetTrigger("Clicking2");
+			}
 		}
 
 		UpdateMovement();  //update character position and facing
@@ -107,18 +111,21 @@ public class PlayerNinjaMovement : MonoBehaviour
 	public IEnumerator COTeleport() {
 		teleporting = true;
 		time = 0.0f; 
-		animator.SetBool("Moving", false);
-		animator.SetBool("Running", false);
+		animator.SetBool ("Moving", false);
+		animator.SetBool ("Running", false);
 		Renderer renderer = GetComponentInChildren<Renderer> ();
 		renderer.enabled = false;
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds (0.5f);
 		transform.position += transform.forward * 10.0f;
 		renderer.enabled = true;
 		teleporting = false;
-		if (tpCombo)
+		if (tpCombo){
 			animator.SetTrigger ("ComboAttack");
-		else if (tpAttack)
-			animator.SetTrigger ("Attack1Trigger");
+		}
+		else if (tpAttack) {
+			animator.SetBool ("Attack1Bool", true);
+		}
+		animator.SetBool ("AnotherATK", false);
 		tpAttack = tpCombo = false;
 	}
 
@@ -164,14 +171,14 @@ public class PlayerNinjaMovement : MonoBehaviour
 
 
 	void OnCollisionEnter(Collision col) {
-		//if (col.gameObject.tag == "Sword") {
-			Debug.Log ("CollisionEnter");
-			collider = true;
-		//}
+		Debug.Log ("CollisionEnter");
+		animator.SetBool("InAir", false);
+		collider = true;
 	}
 
 	void OnCollisionExit(Collision col) {
 		Debug.Log ("CollisionExit");
+		animator.SetBool("InAir", true);
 		collider = false;
 	}
 }
