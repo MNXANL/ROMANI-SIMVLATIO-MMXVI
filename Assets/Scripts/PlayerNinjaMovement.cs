@@ -5,7 +5,8 @@ public class PlayerNinjaMovement : MonoBehaviour
 {
 	private Animator animator;
 	private float time = 0.0f;
-	public float maxTime = 0.85f;
+	public float maxTime = 0.75f;
+	public float JumpPower = 2100f;
 
 	private bool teleporting = false;
 	private bool tpAttack = false;
@@ -42,13 +43,16 @@ public class PlayerNinjaMovement : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetButtonDown ("Fire1"))		{
-			if (time > maxTime) animator.SetTrigger ("Attack1Trigger");
-			else animator.SetTrigger ("ComboAttack");
-
+		if (Input.GetButtonDown ("Fire1"))	{
+			if(time > maxTime){
+				animator.SetTrigger ("Attack1Trigger");
+			}
+			else{
+				animator.SetTrigger ("ComboAttack");
+			}
 			time = 0.0f;
 		}
-			
+
 		//Get input from controls
 		float z = Input.GetAxisRaw("Horizontal");
 		float x = -(Input.GetAxisRaw("Vertical"));
@@ -59,9 +63,12 @@ public class PlayerNinjaMovement : MonoBehaviour
 		animator.SetFloat("Input Z", -(x));
 
 		if (x != 0 || z != 0 ) {
-			//if there is some inputset that character is moving
+			//if there is some input, set that character is moving
 			animator.SetBool("Moving", true);
 			animator.SetBool("Running", true);
+			if(Input.GetButtonDown("Fire3")){
+				StartCoroutine (COTeleport ());
+			}
 		}
 		else {
 			//character is not moving
@@ -73,10 +80,11 @@ public class PlayerNinjaMovement : MonoBehaviour
 			animator.SetTrigger("Attack1Trigger");
 		}
 
-
-		if (Input.GetButtonDown("Fire2"))		{
-			animator.SetTrigger("ParryTrigger");
-			GetComponent<Rigidbody>().AddForce(Vector3.back);
+		if (Input.GetButtonDown	("Fire2"))		{
+			animator.SetBool("Defensa", true);
+		}
+		if (Input.GetButtonUp("Fire2"))		{
+			animator.SetBool("Defensa", false);
 		}
 
 		if (Input.GetButtonDown("Jump") && collider) {
@@ -85,18 +93,33 @@ public class PlayerNinjaMovement : MonoBehaviour
 			GetComponent<Rigidbody>().AddForce(Vector3.up * 2000.0f);
 		}
 
+		if (collider) {
+			animator.SetTrigger ("DeathTrigger");
+		}
+
 		UpdateMovement();  //update character position and facing
 	}
 
-
-
-
-
-
-
-
 	public IEnumerator COStunPause(float pauseTime)	{
 		yield return new WaitForSeconds(pauseTime);
+	}
+
+	public IEnumerator COTeleport() {
+		teleporting = true;
+		time = 0.0f; 
+		animator.SetBool("Moving", false);
+		animator.SetBool("Running", false);
+		Renderer renderer = GetComponentInChildren<Renderer> ();
+		renderer.enabled = false;
+		yield return new WaitForSeconds(0.5f);
+		transform.position += transform.forward * 10.0f;
+		renderer.enabled = true;
+		teleporting = false;
+		if (tpCombo)
+			animator.SetTrigger ("ComboAttack");
+		else if (tpAttack)
+			animator.SetTrigger ("Attack1Trigger");
+		tpAttack = tpCombo = false;
 	}
 
 	//converts control input vectors into camera facing vectors
@@ -121,16 +144,14 @@ public class PlayerNinjaMovement : MonoBehaviour
 	}
 
 	//face character along input direction
-	void RotateTowardMovementDirection()  
-	{
+	void RotateTowardMovementDirection()  	{
 		if (inputVec != Vector3.zero)
 		{
 			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetDirection), Time.deltaTime * rotationSpeed);
 		}
 	}
 
-	void UpdateMovement()
-	{
+	void UpdateMovement()	{
 		//get movement input from controls
 		Vector3 motion = inputVec;
 
@@ -140,9 +161,13 @@ public class PlayerNinjaMovement : MonoBehaviour
 		RotateTowardMovementDirection();  
 		GetCameraRelativeMovement();  
 	}
+
+
 	void OnCollisionEnter(Collision col) {
-		Debug.Log ("CollisionEnter");
-		collider = true;
+		//if (col.gameObject.tag == "Sword") {
+			Debug.Log ("CollisionEnter");
+			collider = true;
+		//}
 	}
 
 	void OnCollisionExit(Collision col) {

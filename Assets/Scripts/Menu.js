@@ -7,7 +7,11 @@ function StartGame() {
 }
 
 function GoToOptions() {
-	SceneManager.LoadScene("Menu");
+	SceneManager.LoadScene("Options");
+}
+
+function GoToMenu() {
+	SceneManager.LoadScene("MainMenu");
 }
 
 
