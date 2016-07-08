@@ -16,7 +16,7 @@ function Start () {
 function Update () {
 	if (timesHit < LifeBar) {
 		if (Input.GetButtonDown("Fire1") && t < MaxTime) {
-			if (Input.GetButtonDown("Fire1") && t < MaxTime) {
+			if (Input.GetButtonDown("Fire2") && t < MaxTime) {
 				t = 0;
 				anim.SetTrigger("ComboAttack");
 			}
@@ -31,6 +31,10 @@ function Update () {
 			anim.SetTrigger("DeathTrigger");
 			kill = false;
 		}
+	}
+
+	if (transform.position.y < -50) {
+		SceneManager.LoadScene("GameOver");
 	}
 }
 

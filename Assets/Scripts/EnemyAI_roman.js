@@ -40,6 +40,7 @@ function Update () {
 	}
 	else {
 		if (kill) {
+			Destroy(gameObject, 5);
 			anim.SetTrigger("DeathTrigger");
 			kill = false;
 		}

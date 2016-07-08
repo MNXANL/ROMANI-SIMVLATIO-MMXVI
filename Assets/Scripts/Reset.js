@@ -5,10 +5,10 @@ function Start () {
 }
 
 function Update () {
-	if (Input.GetKeyDown(KeyCode.R)) {
+	if (Input.GetButtonDown("RestartGame")) {
 		SceneManager.LoadScene("Game1");
 	}
-	else if (Input.GetKeyDown(KeyCode.Escape)) {
+	else if (Input.GetButtonDown("PauseGame")) {
 		SceneManager.LoadScene("MainMenu");
 	}
 }

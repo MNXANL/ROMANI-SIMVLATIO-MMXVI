@@ -6,7 +6,7 @@ public class PlayerNinjaMovement : MonoBehaviour {
 	private Animator animator;
 	private float time = 0.0f;
 	public float maxTime = 0.75f;
-	public float JumpPower = 2100f;
+	public float JumpPower = 5000f;
 
 	private bool teleporting = false;
 	private bool tpAttack = false;
@@ -32,7 +32,6 @@ public class PlayerNinjaMovement : MonoBehaviour {
 
 		if (Input.GetButton("Fire1")) animator.SetBool("Clicking", true);
 		else animator.SetBool("Clicking", false);
-		animator.SetBool("Attack1Bool", false);
 
 		if (teleporting) {
 			if (Input.GetButtonDown ("Fire1")) {
@@ -49,15 +48,14 @@ public class PlayerNinjaMovement : MonoBehaviour {
 
 		if (Input.GetButtonDown("Fire1")) {
 			if (time < maxTime) {
-				animator.SetBool("Attack1Bool", true);
+				animator.SetTrigger("Attack1Bool");
 				animator.SetBool("AnotherATK", true);
 			}
 			else {
+				time = 0.0f;
 				animator.SetTrigger("ComboAttack");
-				animator.SetBool("Attack1Bool", false);
 				animator.SetBool("AnotherATK", true);
 			}
-			time = 0.0f;
 		}
 
 		//Get input from controls
