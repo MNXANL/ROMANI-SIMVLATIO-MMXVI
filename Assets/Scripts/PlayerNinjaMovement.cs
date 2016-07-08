@@ -69,7 +69,7 @@ public class PlayerNinjaMovement : MonoBehaviour {
 		animator.SetFloat("Input X", z);
 		animator.SetFloat("Input Z", -(x));
 
-		if (collider)        {
+
 			if (x != 0 || z != 0)  {
 				//if there is some input, set that character is moving
 				animator.SetBool("Moving", true);
@@ -83,7 +83,7 @@ public class PlayerNinjaMovement : MonoBehaviour {
 				animator.SetBool("Moving", false);
 				animator.SetBool("Running", false);
 			}
-
+		if (collider) 		{
 			if (Input.GetButton("Fire2"))            {
 				animator.SetBool("Defensa", true);
 			}
@@ -172,13 +172,20 @@ public class PlayerNinjaMovement : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col) {
 		Debug.Log ("CollisionEnter");
-		animator.SetBool("InAir", false);
-		collider = true;
+
+		if(col.gameObject.tag == "Gnd") 
+		{
+			animator.SetBool("InAir", false);
+			collider = true;
+		}
 	}
 
 	void OnCollisionExit(Collision col) {
 		Debug.Log ("CollisionExit");
-		animator.SetBool("InAir", true);
-		collider = false;
+
+		if (col.gameObject.tag == "Gnd") {
+			animator.SetBool ("InAir", true);
+			collider = false;
+		}
 	}
 }

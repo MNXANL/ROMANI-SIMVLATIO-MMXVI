@@ -2,8 +2,8 @@
 
 private var player : GameObject;
 public var anim : Animator;
-public var Life : float = 500.0f;
-public var SwordHit : float = 20.0f;
+public var Life : float = 20.0f;
+public var SwordHit : float = 1.0f;
 
 private var t : float = 0.0f;
 private var dist : float = 0.0f;
